@@ -1,12 +1,8 @@
+
 name: Generate playlist manually
 
-# ⚠️注意：请不要在 fork 的仓库中添加 `on: schedule` 定时任务（cron）。
-# 生成结果只能通过 Pages Artifact、每次运行独立的 Release 或外部端点发布，不得提交回 Git。
-# 如需要频繁更新或定时执行，请使用 Docker、命令行、GUI 或外部对象存储。
-#
-# ⚠️NOTICE: Do NOT add `on: schedule` cron triggers in forked repositories.
-# Publish generated results only through a Pages artifact, a per-run release, or an external endpoint; never commit them to Git.
-# Use Docker, the CLI, the GUI, or external object storage for frequent or scheduled runs.
+# Do not add scheduled cron tasks to forked repositories.
+# Publish generated results through Pages or per-run Releases.
 
 on:
   workflow_dispatch:
@@ -254,6 +250,8 @@ jobs:
               "The upstream Pages site provides subscription URLs and previews, with Download buttons pointing to this Release. Its results and logs are for functional testing only. Content completeness, availability, and continued updates are not guaranteed. For actual use, [Fork the project](https://github.com/Guovin/iptv-api/fork) and run your own workflow." \
               "$pages_link"
           fi
+
+          rm -f release-assets/statistic.jsonl
 
           mapfile -d '' local_assets < <(find release-assets -maxdepth 1 -type f -print0 | sort -z)
           gh release create "$RELEASE_TAG" "${local_assets[@]}" \
